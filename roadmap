@@ -20,19 +20,18 @@ Städtesystem
           - Vanilla Exp (Getrackt über Datenbank, ob genug schon verfüttert wurden.)
           - TT Exp (?) (Getrackt über Datenbank, ob genug schon verfüttert wurden.)
     - Möglichkeiten zum Kauf:
-      - Spieler gibt Befehl ein.
-      - Spieler gibt Befehl ein und kauft über Gui
-      - Spieler spricht mit NPC, dieser löst Befehl aus für den Spieler.
-      >> Spieler spricht mit NPC, öffnet GUI und kauft das Recht.
+      - Spieler spricht mit NPC oder führt einen Befehl aus, öffnet GUI und kauft das Recht.
     - Tatsächlicher Kauf ist dann mit Geld (IFH oder Vault), per Config definiert.
   - Gründung:
     - Block (Block mit seltenem type, zur vereinfachten Abfrage (Bedrock/Enportalstein)) In die hand (Mit schöner Lore etc.)
     - Den kann man nun in der Welt setzten um die Stadt zu gründen.
       Der Gründungsblock wird entfernt und eine Fläche von Länge x Breit wird als Stadt gesichtert. (~5x5)
-    - Die Gründungsoptions des Spielers wird Datenbanktechnisch hinterlegt. Nicht berechtigte Spieler können den Block zwar klauen, aber nicht damit Gründen.
+    - Die Gründungsoptions des Spielers wird Datenbanktechnisch hinterlegt. 
+      Nicht berechtigte Spieler können den Block zwar klauen, aber nicht damit Gründen.
+      Eventuell beim Droppen von Items drübergehen, ob das ein Gründungsblock ist und den dann entfernen.
     - Sollte ein unberechtigter Spieler diesen nun setzten, wird er gelöscht. (Inventar/in der Welt selbst)
-    - Sollte ein berechtigter Spieler diesen Verloren haben. Sollte er die Möglichkeit bekommen, vom Admin einen neuen Block. (Adminbefehl zu erstellen einen
-      Gründerblocks)
+    - Sollte ein berechtigter Spieler diesen Verloren haben. Sollte er die Möglichkeit bekommen, vom Admin einen neuen Block. 
+      (Adminbefehl zu erstellen einen Gründerblocks)
     - Der Ausführende Spieler wird als Eigentümer eingetragen.
     - Kein Andere Spieler (Außer welche die die Rechte bekommen), können dort nun abbauen oder bauen.
     - Eventuell mit Globaler Nachricht? Aka Spieler x hat Stadt gegründet.
@@ -46,61 +45,139 @@ Städtesystem
       - Geld
       - Vanilla Exp
       - Materialliste
-- Stadteigenschaften
-  - Punkt1, Punkt2 (Nicht Chunkbasierend)
-  - Eigentümer/Statthalter
-  - Gründungspunkt (Wo der Gründungspunkt gesetzt wurde)
-  - Gründer
-  - Gründungsdatum
-  - Städte sollten ihr eigenes rudimentäres Datenbank Itemlager haben. Um Kosten oder anderweitige Dinge "bezahlen" zu können.
-  - Stadtname
-  - Stadtbeschreibung
-  - Stadtlevel
-  - SecurityLevel (https://github.com/Avankziar/CityTree/blob/master/src/main/java/de/avankziar/citytree/spigot/interfaces/cities/City.java Zeile 298)
-  - Genereller Stadtwarppunkt
-  - ListenType, (OPEN für alle offen, ONLY_MEMBER nur für Mitglieder darf hineinkommen. Für den Warp etc.)
-  - GuiIcon (Material), zur darstellung in einer Städtegui
-  - Boolean canLevelUp (Admin boolean zur definierung ob diese Auflevelen dürfen, wird per Manueller Eingabe und eventueller
-    Überprüfung der Stadt genutzt, falls die Admins regeln außerhalb des Plugin aufstellen um auflevel zu können.)
-  - String lastApprover (Admin, welche die stadt zuletzt erlaubt hat aufzulevel)
-  - Boolean wouldLevelUp (Spieler boolean um das bedürfnis zu deklariern dass man auflevel will. Admins beim Login die Stadt angezeigt bekommen, um eine
-    Überprüfung durchzuführen)
-  - Aktuelle Anzahl an Grundstücke
-  - Maximale Anzahl an Grundstücke
-  - Aktuelle Anzahl an Distrikten
-  - Maximale anzahl an Distrikten
-  - Aktuelle Redstoneblöcke
-  - Maximale Redstoneblöcke (Redstonestaub, Repeater etc.) (Bei überschreitung des Levels wird das gesetzte Item als Block gelöscht)
-  - Ausgelagerte Daten:
-    - Stadtlager (Pro Item, Geld und VanillaExp)
-    - Blackliste an Spielern, die sich nicht hinteleportieren dürfen.
-    - Propeties/Grundstücke Liste
-    - Distrikte Liste
-    - Spieler mit vergebenen Rang innerhalb der Stadt
-    - Liste von Stadtkennzeichen/Cityflag
-      - Determiniert welche Stadt das hat.
-      - In welchem Zustand es ist. An oder aus
-      - Wann wieder dieser Zustand geändert werden kann (Cooldown)
-      - Liste an SK/CF: (Sk/CF sollten per Config definiert werden, ob und wann man was haben darf)
-        - PvP-Schutz
-        - TNT-Schutz
-        - Generellen Warppunkt
-        - Distrikt Warppunkte
-        - Entity XY Kein Spawn
-        - Erstellen von Shops in der Stadt
-        - Erstellen von Shops auf Grundstücken
-        - Vermietrecht von Gs
-        - Verkaufsrecht von Gs
-        - Wiederherstellungrecht für Gs
-    - Städte sollen von anfang an auch SK/CF besitzten, die bestimmte dinge Verbieten.
-        - Stadtverbote/Citybans Liste: (SV/CB sollten per Config definiert werden, wann welche deaktivert werden oder generell zutreffen)
-          - Setzten von Redstone(Redstoneartigen Dingen, wie Repeater etc)
-          - Setzten von Spawner
-          - 
+  - Stadteigenschaften
+    - Punkt1, Punkt2 (Nicht Chunkbasierend)
+    - Eigentümer/Statthalter
+    - Gründungspunkt (Wo der Gründungspunkt gesetzt wurde)
+    - Gründer
+    - Gründungsdatum
+    - Städte sollten ihr eigenes rudimentäres Datenbank Itemlager haben. Um Kosten oder anderweitige Dinge "bezahlen" zu können.
+    - Stadtname
+    - Stadtbeschreibung
+    - Stadtlevel
+    - SecurityLevel (https://github.com/Avankziar/CityTree/blob/master/src/main/java/de/avankziar/citytree/spigot/interfaces/cities/City.java Zeile 298)
+    - Genereller Stadtwarppunkt
+    - ListenType, (OPEN für alle offen, ONLY_MEMBER nur für Mitglieder darf hineinkommen. Für den Warp etc.)
+    - GuiIcon (Material), zur darstellung in einer Städtegui
+    - Boolean canLevelUp (Admin boolean zur definierung ob diese Auflevelen dürfen, wird per Manueller Eingabe und eventueller
+      Überprüfung der Stadt genutzt, falls die Admins regeln außerhalb des Plugin aufstellen um auflevel zu können.)
+    - String lastApprover (Admin, welche die stadt zuletzt erlaubt hat aufzulevel)
+    - Boolean wouldLevelUp (Spieler boolean um das bedürfnis zu deklariern dass man auflevel will. Admins beim Login die Stadt angezeigt bekommen, um eine
+      Überprüfung durchzuführen)
+    - Aktuelle Anzahl an Grundstücke
+    - Maximale Anzahl an Grundstücke
+    - Aktuelle Anzahl an Distrikten
+    - Maximale anzahl an Distrikten
+    - Aktuelle Redstoneblöcke
+    - Maximale Redstoneblöcke (Redstonestaub, Repeater etc.) (Bei überschreitung des Levels wird das gesetzte Item als Block gelöscht)
+    - Aktuelle Entitys
+    - Maximale Entitys
+    - Ausgelagerte Daten:
+      - Stadtlager (Pro Item, Geld und VanillaExp)
+      - Blackliste an Spielern, die sich nicht hinteleportieren dürfen.
+      - Propeties/Grundstücke Liste
+      - Distrikte Liste
+      - Spieler mit vergebenen Rang innerhalb der Stadt
+      - Liste von Stadtkennzeichen/Cityflag
+        - Determiniert welche Stadt das hat.
+        - In welchem Zustand es ist. An oder aus
+        - Wann wieder dieser Zustand geändert werden kann (Cooldown)
+        - Liste an SK/CF: (Sk/CF sollten per Config definiert werden, ob und wann man was haben darf)
+          - PvP-Schutz
+          - TNT-Schutz
+          - Generellen Warppunkt
+          - Distrikt Warppunkte
+          - Entity XY Kein Spawn
+          - Erstellen von Shops in der Stadt
+          - Erstellen von Shops auf Grundstücken
+          - Vermietrecht von Gs
+          - Verkaufsrecht von Gs
+          - Wiederherstellungrecht für Gs
+      - Städte sollen von anfang an auch SK/CF besitzten, die bestimmte dinge Verbieten.
+          - Stadtverbote/Citybans Liste: (SV/CB sollten per Config definiert werden, wann welche deaktivert werden oder generell zutreffen)
+            - Setzten von Redstone(Redstoneartigen Dingen, wie Repeater etc)
+            - Setzten von Spawner
+            - ...
+      - Liste von Stadtmonumenten:
+        - Gs werden von Stadtverwalter als Monoment eingesetzt. Dabei muss ein Admin dies meist überprüfen und bestätigen
+        - Gs können per Adminüberprüfung/Befehl als Monument bezeichnet werden.
+          - Bestimmte Monumente kann auch der Stadtverwalter direkt einsetzten. 
+            Bspw. Plfanzenzucht, Viehzucht, Markt.
+        - Gs können dieses Status auch durch einen Befehl wieder entfernen.
+        - Es soll per Config definiert werden, wieviel Monumente pro Stadtlevel.
+        - Mögliche Monumente Typen:
+          - Gebetshaus (Wenn der MonomentType bestimmt wurde, darf keiner mehr abbauen.)
+            - Religiöses kleinst Gebetshaus (bspw. kleine Kapellen etc.)
+            - Religiöses kleines Gebetshaus (bspw. große Kapellen etc.)
+            - Religiöses nomales Gebetshaus (bspw. kleine Kirchen etc.)
+            - Religiöses großes Gebetshaus (bspw. Kirchen etc.)
+            - Religiöses größtes Gebetshaus (bspw. große Kirchen etc. Kölner Dom oder so)
+          - Kultstätte (Wenn der MonomentType bestimmt wurde, darf keiner mehr abbauen.)
+            - Religiöse kleine Kultstätte (bspw. heilige Quelle auf Sylt)
+            - Religiöse normale Kultstätte (bspw. Stonehenge)
+            - Religiöse große Kultstätte (bspw. Pyramiden, Machu Pichu, Black Hills)
+          - Bürgerversammlung
+            - Bürgerhaus
+            - Bürgerhalle
+          - Erholungsstätte (Gibt einen Effekt, welche die Config definiert)
+            - kleine Erholungsstätte (bspw. Wasserquellen)
+            - normale Erholungsstätte (bspw. Badehaus)
+          - Pflanzenzucht (Bestimmte Blöcke, Pflanzen können abgebaut werden)
+            - kleines Feld
+            - normales Feld
+            - großes Feld
+          - Viehzucht
+            - kleines Gehege
+            - normales Gehege
+            - großes Gehege
+          - Markt 
+            - kleiner Markt
+            - normaler Markt
+            - großer Markt
+          - Naturschutzgebiet
+            - kleiner Naturschutzgebiet
+            - normaler Naturschutzgebiet
+            - großes Naturschutzgebiet
+- Distrikt
+  - Distrike sind Zone innerhalb einer Stadt.
+  - Distrike können Spieler als Distriktverwalter haben.
+  - Distrikteingenschaft
+    - ID
+    - Stadtid
+    - Namen
+    - Punkt 1 / Punkt 2
+    - Distriktmitglieder (Spieler die im Distrikt bauen können)
+    - Default Gs maximale Redstoneblöcke (Standartwert für neu geschaffen Gs, werden dieser übernommen)
+    - Default Gs maximale Entitys (Standartwert für neu geschaffene Gs, werden diese übernommen)
+- Distriktverwalter
+  - Können Gs, welche in den Distrike liegen verwalten.
+    - Setzen von MonomentTyp
+    - Einstellung von aktuellen/zukünftige Mietkosten
+    - Einstellung von aktuellen/zukünftige Kaufpreis
+    - Setzen von Wiederstellungen-Boolean
+    - Setzten von aktuellen/zukünftigen Status
+    - Einstellung von der Maximalen Gs Redstoneblöcken.
+    - Einstellung von der maximalen Gs Entitys.
+  - Kann nicht Gs dem Distrikt zuordenen.
+  - Mysql
+    - Stadtid
+    - Distriktid
+    - UUID
+- Distriktmitglieder
+  - Erlaubt das Bebauen des Destrikts ohne Stadt
+  - Mysql
+    - Stadtid
+    - Distriktid
+    - UUID
 - Rangsystem in einer Stadt
+  - Stadtverwalter
   - Co-Stattverwalter
+  - Stadtmitglied
   - Distriktverwalter
-  - 
+  - Distriktmitglied
+  - Grundstückeigentümer
+  - Grundstück-Miteigentümer
+  - Grundstück-Mitbewohner
 - Economy
   - Mieter/Käufer eines Grundstücks zahlt an die Stadt
   - Stadt zahlt
@@ -113,6 +190,8 @@ Städtesystem
   - Id der Stadt
   - Id der Distrikt
   - Namen
+  - aktueller MonomentType (Standart NONE) (Typ, welcher von Admin bestätigt worden ist)
+  - zukünftiger MonomentType (Standart NONE) (Typ, welcher der Stadtverwalter haben will)
   - Aktuelle Mietkosten
   - Zukünftige Mietkosten
   - Mietkostendifferenz
@@ -120,7 +199,8 @@ Städtesystem
   - Zukünftiger Kaufpreis
   - Gemietet/Gekauft Seit Zeit
   - Boolean Wiederherstellung (Sollte das Gs verlassen werden, soll es in den ursprünglichen Zustand hingestellt werden)
-  - Aktuellen Status (Frei, Gekauft, Gemietet, Mietrückstand(Wenn die Miete nicht beglichen wurde. Zustand kann man durch die einen Befehl wieder wett machen))
+  - Aktuellen Status (Frei, Gekauft, Gemietet, Mietrückstand(Wenn die Miete nicht beglichen wurde. 
+    Zustand kann man durch die einen Befehl wieder wett machen)) Kann nur gekauft/gemietet werden, wenn MonomentTyp == NONE ist.
   - Zukünftigen Status
   - Statuswechelzeit (Wann der Status gewechselt wird in millisekunden UNIX) (Wird per Config definiert wie lange bis zum Statuswechel ist)
   - Grundstückseigentümer
@@ -129,3 +209,5 @@ Städtesystem
   - Aktuelle Redstoneblöcke
   - Maximale Redstoneblöcke (Redstonestaub, Repeater etc.) (Bei überschreitung des Levels wird das gesetzte Item als Block gelöscht)
     Wird dediziert eingestellt von dem Stadtverwalter. Die Anzahl dieser Blöcke wird von der Maxmimal Anzahl der Stadt dann subtrahiert.
+  - Aktuelle Entitys
+  - Maximale Entitys (Bei überschreitung des Levels, wird das Entity entfernt)
