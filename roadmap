@@ -3,8 +3,12 @@
 ##############
 Städtesystem
 
+- OnDisable
+  - Alle Objecte im RAM sollten in die Mysql geupdatet werden.
 - Stadt
   - Alle Städte können sich die Welt teilen.
+  - Städte, welche auf dem Server existieren, werden im RAM gehalten.
+    Alle x Minuten und bei bestimmtn Aktionen (wie Grenzerweiterungen) werden die in die Mysql gespeichert.
   - Städte sollten bei Gründen einen Mindestabstand zu anderen Städten haben. ~100 Blöcken (Config)
   - Kauf eines Gründungsrechts:
     - Zum Kauf braucht der Spieler eine Permission. (Diese gibt NICHT an, wieviel er darf)
@@ -14,6 +18,7 @@ Städtesystem
         - Passive Dinge:
           - Gesamtspielzeit
           - Aktivespielzeit
+          - Voteanzahl für den Server?
         - Aktive Dinge:
           - Materialliste (Liste und Anzahl an Items, welche per Datenbank getrackt werden, wieviel schon "verfüttert" wurden an den Prozess)
             Pro Item einen Eintrag!
@@ -36,6 +41,7 @@ Städtesystem
     - Kein Andere Spieler (Außer welche die die Rechte bekommen), können dort nun abbauen oder bauen.
     - Eventuell mit Globaler Nachricht? Aka Spieler x hat Stadt gegründet.
     - Feuerwerk?
+    - Per Config soll entschieden werden, ob per IFH ein Stadtaccount erstellt werden soll.
   - Stadterweiterung
     - Spieler blickt in die jeweilige Richtung und gibt den Befehl zum vergrößern ein
       /cas expand <Anzahl der Blockreihen> [bestätigen]
@@ -45,13 +51,36 @@ Städtesystem
       - Geld
       - Vanilla Exp
       - Materialliste
+    - Materielle Kosten sollen per IFH API an VSS gehen können. Und alle Lager von dem ausführenden Spieler
+      ansteuern.
+  - Stadtkosten
+    - Städte zahlen Geld an bestimmte System.
+      - An den Server wird ein Verwaltungsaufwand bezahlt.
+        - Dieser wird an der Fläche der Stadt sowie die existieren Distrike, Gs sowie die Stadtkennzeichen.
+        - Stadtmonumente reduzieren je nach Stufe und Ausrichtung diese Kosten von Distrikte, Gs und Stadtkennzeichen.
+          Jedoch kann es nicht die Kosten für die Fläche negieren. (Aka das ist ein Basissatz).
+        - Die Kosten für allem wird per Config definiert. Und wird pro Tag abgezogen.
+        - Die Kosten für die Fläche wird Stufenweise angegeben.
+          Dies soll einen Erleichterung/Erschwerung für größere Städte geben.
+          Dabei wird immer der Blockpreis angegeben.
+      - An den zugehörigen Staat, in welche die Stadt mitglied ist. (Sofern existierend)
+        Zahlt die Stadt einen Untertanbeitrag.
+        - Dieser ist an der Fläche bemessen. Setzt aber der Staat selber fest.
+      - Stadtverwalter, Stadtmitglieder, Distriktverwalter und Distriktmitglieder können einen Geldbetrag pro Tag
+        für ihren Aufwand gezahlt werden.
+  - Distrikte in einer Stadt:
+    - Städte haben pro Stadtlevel eine Grundanzahl an Distrikten
+    - Städte können extra Distrikte dazukaufen um die Anzahl an möglichen Distrikten zu erhöhen.
+  - Grundstücke in ein Stadt:
+    - Städte haben pro Stadtlevel ein Grundanzahl an Grundstücke
+    - Städte können extra Grundstücke dazukaufen um die Anzahl an möglichen Grundstücke zu erhöhen.
   - Stadteigenschaften
-    - Punkt1, Punkt2 (Nicht Chunkbasierend)
+    - Punkt1, Punkt2 (Nicht Chunkbasierend) (ABER SERVER WELT X Y Z in EINZELEN Zeilen setzten, nicht zusammen!!)
     - Eigentümer/Statthalter
     - Gründungspunkt (Wo der Gründungspunkt gesetzt wurde)
     - Gründer
     - Gründungsdatum
-    - Städte sollten ihr eigenes rudimentäres Datenbank Itemlager haben. Um Kosten oder anderweitige Dinge "bezahlen" zu können.
+    - IFH Account ID (Wenn Vault genommen wird, wird immer der Account des Ausführenden Spieler genommen)
     - Stadtname
     - Stadtbeschreibung
     - Stadtlevel
@@ -64,17 +93,21 @@ Städtesystem
     - String lastApprover (Admin, welche die stadt zuletzt erlaubt hat aufzulevel)
     - Boolean wouldLevelUp (Spieler boolean um das bedürfnis zu deklariern dass man auflevel will. Admins beim Login die Stadt angezeigt bekommen, um eine
       Überprüfung durchzuführen)
+    - Standartaufwandsentschädigung für Stadtverwalter
+    - Standartaufwandsentschädigung für Stadtmitglieder
     - Aktuelle Anzahl an Grundstücke
     - Maximale Anzahl an Grundstücke
+    - Dazugekaufte Anzahl an Grundstücke
     - Aktuelle Anzahl an Distrikten
     - Maximale anzahl an Distrikten
+    - Dazugekaufte Distrikte
     - Aktuelle Redstoneblöcke
     - Maximale Redstoneblöcke (Redstonestaub, Repeater etc.) (Bei überschreitung des Levels wird das gesetzte Item als Block gelöscht)
     - Aktuelle Entitys
     - Maximale Entitys
     - Ausgelagerte Daten:
       - Stadtlager (Pro Item, Geld und VanillaExp)
-      - Blackliste an Spielern, die sich nicht hinteleportieren dürfen.
+      - Blackliste an Spielern, die sich nicht hinteleportieren dürfen. (oder reinlaufen?)
       - Propeties/Grundstücke Liste
       - Distrikte Liste
       - Spieler mit vergebenen Rang innerhalb der Stadt
@@ -82,6 +115,9 @@ Städtesystem
         - Determiniert welche Stadt das hat.
         - In welchem Zustand es ist. An oder aus
         - Wann wieder dieser Zustand geändert werden kann (Cooldown)
+        - Das deaktivieren kostet nichts. Das aktivieren schon (Config)
+        - SK/CF haben einen Verwaltungsaufwand der sich nach danach richtet ob sie aktiv ist oder nicht.
+          Aka Wenn aktiv kostet es mehr als Inaktiv. Per Config definiert.
         - Liste an SK/CF: (Sk/CF sollten per Config definiert werden, ob und wann man was haben darf)
           - PvP-Schutz
           - TNT-Schutz
@@ -104,8 +140,10 @@ Städtesystem
           - Bestimmte Monumente kann auch der Stadtverwalter direkt einsetzten. 
             Bspw. Plfanzenzucht, Viehzucht, Markt.
         - Gs können dieses Status auch durch einen Befehl wieder entfernen.
-        - Es soll per Config definiert werden, wieviel Monumente pro Stadtlevel.
+        - Es soll per Config definiert werden, wieviel Monumente pro Stadtlevel die Stadt haben darf.
+        - Monumente sollten auch als Vorraussetzung dienen für ein Stadtlevel dienen.
         - Mögliche Monumente Typen:
+          - Standart NONE (Für nix)
           - Gebetshaus (Wenn der MonomentType bestimmt wurde, darf keiner mehr abbauen.)
             - Religiöses kleinst Gebetshaus (bspw. kleine Kapellen etc.)
             - Religiöses kleines Gebetshaus (bspw. große Kapellen etc.)
@@ -138,17 +176,46 @@ Städtesystem
             - kleiner Naturschutzgebiet
             - normaler Naturschutzgebiet
             - großes Naturschutzgebiet
+          - Industrie
+            - kleine Werkstätte
+            - normaler Handwerkerbetrieb
+            - große Industrieanlage
+- Stadtverwalter
+  - Stadtverwalter, dazu gehört auch der Statthalter, haben alle Rechte innerhalb der Stadt bzw. der Distrikte
+    oder nicht verkauften/vermieteten Gs.
+  - Mysql (Eigene, nicht zusammenbringen mit Stadtmitglieder)
+    - ID
+    - StadtID
+    - UUID
+    - Aufwandsentschädigung (Geld)
+- Stadtmitglieder
+  - Stadtmitglieder sind Personen, die innerhalb der Stadt, aber nicht in Distriken oder Grundstücken bauen können.
+  - Mysql(Eigene, nicht zusammenbringen mit Stadtverwalter)
+    - ID
+    - StadtID
+    - UUID
+    - Aufwandsentschädigung (Geld)
 - Distrikt
   - Distrike sind Zone innerhalb einer Stadt.
+  - Distrike, welche sich auf dem Server befinden, werden im RAM geladen.
+    Alle x Minuten und bei bestimmtn Aktionen (wie Grenzerweiterungen) werden die in die Mysql gespeichert.
   - Distrike können Spieler als Distriktverwalter haben.
+  - Distrike müssen aktiv und manuell erstellt werden.
+  - Distrike können erweitert werden. Sie können sich auch überlappen.
+  - Städte haben pro Stadtlevel ein Standartanzahl von Distrikten. Wird per Config definiert.
+  - Die Anzahl an erstellten Distrike fließt in die Aufwendungskosten von Städten hinein.
+    Sowie auch in eventuell Stadtlevelvorraussetzungen etc.
+  - Distrike haben keine Maximalen Redstoneblöcke oder Entitys zähler. Diese werden nur pro Gs und Stadt verteilt.
   - Distrikteingenschaft
     - ID
     - Stadtid
     - Namen
     - Punkt 1 / Punkt 2
-    - Distriktmitglieder (Spieler die im Distrikt bauen können)
-    - Default Gs maximale Redstoneblöcke (Standartwert für neu geschaffen Gs, werden dieser übernommen)
-    - Default Gs maximale Entitys (Standartwert für neu geschaffene Gs, werden diese übernommen)
+    - Standartaufwandsentschädigung für Distriktverwalter
+    - Standartaufwandsentschädigung für Distriktmitglieder
+    - Ausgelagerte Daten:
+      - Distriktverwalter
+      - Distriktmitglieder (Spieler die im Distrikt bauen können)
 - Distriktverwalter
   - Können Gs, welche in den Distrike liegen verwalten.
     - Setzen von MonomentTyp
@@ -163,12 +230,14 @@ Städtesystem
     - Stadtid
     - Distriktid
     - UUID
+    - Aufwandsentschädigung (Geld)
 - Distriktmitglieder
   - Erlaubt das Bebauen des Destrikts ohne Stadt
   - Mysql
     - Stadtid
     - Distriktid
     - UUID
+    - Aufwandsentschädigung (Geld)
 - Rangsystem in einer Stadt
   - Stadtverwalter
   - Co-Stattverwalter
@@ -184,30 +253,35 @@ Städtesystem
     - pro Fläche bürokratischen Verwaltungsaufwand
     - pro Fläche an den Staat, der sie zugehörig sind, falls dass der Fall ist.
   - Staat zahlt pro Städteanzahl wegen bürokratischen Verwaltungsaufwand ans System
-- Distrikteigenschaften
-  - ID der Stadt
-- Grundstückeigentschaft
-  - Id der Stadt
-  - Id der Distrikt
-  - Namen
-  - aktueller MonomentType (Standart NONE) (Typ, welcher von Admin bestätigt worden ist)
-  - zukünftiger MonomentType (Standart NONE) (Typ, welcher der Stadtverwalter haben will)
-  - Aktuelle Mietkosten
-  - Zukünftige Mietkosten
-  - Mietkostendifferenz
-  - Aktuelle Kaufpreis
-  - Zukünftiger Kaufpreis
-  - Gemietet/Gekauft Seit Zeit
-  - Boolean Wiederherstellung (Sollte das Gs verlassen werden, soll es in den ursprünglichen Zustand hingestellt werden)
-  - Aktuellen Status (Frei, Gekauft, Gemietet, Mietrückstand(Wenn die Miete nicht beglichen wurde. 
-    Zustand kann man durch die einen Befehl wieder wett machen)) Kann nur gekauft/gemietet werden, wenn MonomentTyp == NONE ist.
-  - Zukünftigen Status
-  - Statuswechelzeit (Wann der Status gewechselt wird in millisekunden UNIX) (Wird per Config definiert wie lange bis zum Statuswechel ist)
-  - Grundstückseigentümer
-  - Miteigentümer (Liste) (Personen, die auch für die Miete aufkommen sollen, falls der GsEigentümer nicht zahlen kann)
-  - Mitbewohner (Liste) (Personen, die NICHT für die Miete aufkommen werden, egal was ist)
-  - Aktuelle Redstoneblöcke
-  - Maximale Redstoneblöcke (Redstonestaub, Repeater etc.) (Bei überschreitung des Levels wird das gesetzte Item als Block gelöscht)
-    Wird dediziert eingestellt von dem Stadtverwalter. Die Anzahl dieser Blöcke wird von der Maxmimal Anzahl der Stadt dann subtrahiert.
-  - Aktuelle Entitys
-  - Maximale Entitys (Bei überschreitung des Levels, wird das Entity entfernt)
+- Grundstück
+  - Grundstücke, welche sich auf dem Server befinden werden in den RAM geladen.
+  - Alle x Minuten und bei bestimmtn Aktionen (wie Grenzerweiterungen) werden die in die Mysql gespeichert.
+  - Grundstücke sind die unterste Zone im System.
+  - Jedes erstelltes Grundstück ist immer einer Stadt zugeweisen. Aber nicht einem Distrikt.
+  - Grundstücke können an andere Spieler vermietet/verkauft werden oder sie dienen als MonomentType.
+    Aka eine Art GebäudeType in der Stadt.
+  - Grundstückeigentschaft
+    - Id der Stadt
+    - Id der Distrikt
+    - Namen
+    - aktueller MonomentType (Standart NONE) (Typ, welcher von Admin bestätigt worden ist)
+    - zukünftiger MonomentType (Standart NONE) (Typ, welcher der Stadtverwalter haben will)
+    - Aktuelle Mietkosten
+    - Zukünftige Mietkosten
+    - Mietkostendifferenz
+    - Aktuelle Kaufpreis
+    - Zukünftiger Kaufpreis
+    - Gemietet/Gekauft Seit Zeit
+    - Boolean Wiederherstellung (Sollte das Gs verlassen werden, soll es in den ursprünglichen Zustand hingestellt werden)
+    - Aktuellen Status (Frei, Gekauft, Gemietet, Mietrückstand(Wenn die Miete nicht beglichen wurde. 
+      Zustand kann man durch die einen Befehl wieder wett machen)) Kann nur gekauft/gemietet werden, wenn MonomentTyp == NONE ist.
+    - Zukünftigen Status
+    - Statuswechelzeit (Wann der Status gewechselt wird in millisekunden UNIX) (Wird per Config definiert wie lange bis zum Statuswechel ist)
+    - Grundstückseigentümer
+    - Miteigentümer (Liste) (Personen, die auch für die Miete aufkommen sollen, falls der GsEigentümer nicht zahlen kann)
+    - Mitbewohner (Liste) (Personen, die NICHT für die Miete aufkommen werden, egal was ist)
+    - Aktuelle Redstoneblöcke
+    - Maximale Redstoneblöcke (Redstonestaub, Repeater etc.) (Bei überschreitung des Levels wird das gesetzte Item als Block gelöscht)
+      Wird dediziert eingestellt von dem Stadtverwalter. Die Anzahl dieser Blöcke wird von der Maxmimal Anzahl der Stadt dann subtrahiert.
+    - Aktuelle Entitys
+    - Maximale Entitys (Bei überschreitung des Levels, wird das Entity entfernt)
