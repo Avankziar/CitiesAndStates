@@ -45,7 +45,7 @@ Städtesystem
   - Stadterweiterung
     - Spieler blickt in die jeweilige Richtung und gibt den Befehl zum vergrößern ein
       /cas expand <Anzahl der Blockreihen> [bestätigen]
-      - Befehl ohne Bestätigung gibt die Kosten an.
+      - Befehl ohne Bestätigung gibt die Kosten an. (Mit angabe, was noch fehlt)
       - Wenn die Stadtgrenzen auf eine andere Stadtgrenze trifft wird das blockiert.
     - Kosten pro Blockreihe (Blockreihenkosten per Formel angeben, mit im Hinterkopf Stadtlevels)
       - Geld
@@ -68,11 +68,13 @@ Städtesystem
         - Dieser ist an der Fläche bemessen. Setzt aber der Staat selber fest.
       - Stadtverwalter, Stadtmitglieder, Distriktverwalter und Distriktmitglieder können einen Geldbetrag pro Tag
         für ihren Aufwand gezahlt werden.
+        - Stadtmitglieder können von Stadtverwalter eingetragen werden, Distrikmitglieder können von Distriktverwalter eingetragen werden.
+          Bis zu einem Limit in der Mysql.
   - Distrikte in einer Stadt:
-    - Städte haben pro Stadtlevel eine Grundanzahl an Distrikten
+    - Städte haben pro Stadtlevel eine Grundanzahl an Distrikten (Config)
     - Städte können extra Distrikte dazukaufen um die Anzahl an möglichen Distrikten zu erhöhen.
   - Grundstücke in ein Stadt:
-    - Städte haben pro Stadtlevel ein Grundanzahl an Grundstücke
+    - Städte haben pro Stadtlevel ein Grundanzahl an Grundstücke (Config)
     - Städte können extra Grundstücke dazukaufen um die Anzahl an möglichen Grundstücke zu erhöhen.
   - Stadteigenschaften
     - Punkt1, Punkt2 (Nicht Chunkbasierend) (ABER SERVER WELT X Y Z in EINZELEN Zeilen setzten, nicht zusammen!!)
@@ -93,13 +95,9 @@ Städtesystem
     - String lastApprover (Admin, welche die stadt zuletzt erlaubt hat aufzulevel)
     - Boolean wouldLevelUp (Spieler boolean um das bedürfnis zu deklariern dass man auflevel will. Admins beim Login die Stadt angezeigt bekommen, um eine
       Überprüfung durchzuführen)
-    - Standartaufwandsentschädigung für Stadtverwalter
-    - Standartaufwandsentschädigung für Stadtmitglieder
-    - Aktuelle Anzahl an Grundstücke
-    - Maximale Anzahl an Grundstücke
+    - Standartaufwandsentschädigunglimit für Stadtverwalter
+    - Standartaufwandsentschädigunglimit für Stadtmitglieder
     - Dazugekaufte Anzahl an Grundstücke
-    - Aktuelle Anzahl an Distrikten
-    - Maximale anzahl an Distrikten
     - Dazugekaufte Distrikte
     - Aktuelle Redstoneblöcke
     - Maximale Redstoneblöcke (Redstonestaub, Repeater etc.) (Bei überschreitung des Levels wird das gesetzte Item als Block gelöscht)
@@ -137,8 +135,9 @@ Städtesystem
       - Liste von Stadtmonumenten:
         - Gs werden von Stadtverwalter als Monoment eingesetzt. Dabei muss ein Admin dies meist überprüfen und bestätigen
         - Gs können per Adminüberprüfung/Befehl als Monument bezeichnet werden.
-          - Bestimmte Monumente kann auch der Stadtverwalter direkt einsetzten. 
+          - Bestimmte Monumente kann auch der Stadtverwalter direkt einsetzten. Aber nur die erste stufe.
             Bspw. Plfanzenzucht, Viehzucht, Markt.
+        - Einsetzen/Aufwerten von Monumenten kostet Geld. (Config, IFH von Stadtkonto, Vault von auszuführenden Spieler)
         - Gs können dieses Status auch durch einen Befehl wieder entfernen.
         - Es soll per Config definiert werden, wieviel Monumente pro Stadtlevel die Stadt haben darf.
         - Monumente sollten auch als Vorraussetzung dienen für ein Stadtlevel dienen.
@@ -160,7 +159,7 @@ Städtesystem
           - Erholungsstätte (Gibt einen Effekt, welche die Config definiert)
             - kleine Erholungsstätte (bspw. Wasserquellen)
             - normale Erholungsstätte (bspw. Badehaus)
-          - Pflanzenzucht (Bestimmte Blöcke, Pflanzen können abgebaut werden)
+          - Pflanzenzucht (Bestimmte Blöcke, Pflanzen können von jedem abgebaut werden)
             - kleines Feld
             - normales Feld
             - großes Feld
@@ -180,6 +179,7 @@ Städtesystem
             - kleine Werkstätte
             - normaler Handwerkerbetrieb
             - große Industrieanlage
+          - Polizei/Feuerwehr/Krankenhaus/Schule...
 - Stadtverwalter
   - Stadtverwalter, dazu gehört auch der Statthalter, haben alle Rechte innerhalb der Stadt bzw. der Distrikte
     oder nicht verkauften/vermieteten Gs.
@@ -202,30 +202,24 @@ Städtesystem
   - Distrike können Spieler als Distriktverwalter haben.
   - Distrike müssen aktiv und manuell erstellt werden.
   - Distrike können erweitert werden. Sie können sich auch überlappen.
-  - Städte haben pro Stadtlevel ein Standartanzahl von Distrikten. Wird per Config definiert.
-  - Die Anzahl an erstellten Distrike fließt in die Aufwendungskosten von Städten hinein.
-    Sowie auch in eventuell Stadtlevelvorraussetzungen etc.
   - Distrike haben keine Maximalen Redstoneblöcke oder Entitys zähler. Diese werden nur pro Gs und Stadt verteilt.
   - Distrikteingenschaft
     - ID
     - Stadtid
     - Namen
     - Punkt 1 / Punkt 2
-    - Standartaufwandsentschädigung für Distriktverwalter
-    - Standartaufwandsentschädigung für Distriktmitglieder
-    - Ausgelagerte Daten:
-      - Distriktverwalter
-      - Distriktmitglieder (Spieler die im Distrikt bauen können)
+    - Standartaufwandsentschädigunglimit für Distriktverwalter
+    - Standartaufwandsentschädigunglimit für Distriktmitglieder
 - Distriktverwalter
   - Können Gs, welche in den Distrike liegen verwalten.
+    - Ziehen von Gs innerhalb des Distriktes. IMMER mit Distrikt angabe.
     - Setzen von MonomentTyp
     - Einstellung von aktuellen/zukünftige Mietkosten
     - Einstellung von aktuellen/zukünftige Kaufpreis
     - Setzen von Wiederstellungen-Boolean
     - Setzten von aktuellen/zukünftigen Status
-    - Einstellung von der Maximalen Gs Redstoneblöcken.
-    - Einstellung von der maximalen Gs Entitys.
-  - Kann nicht Gs dem Distrikt zuordenen.
+    - Bebauen eines Distriktes
+    - Einstellen von Distriktkennzeichen
   - Mysql
     - Stadtid
     - Distriktid
@@ -239,20 +233,14 @@ Städtesystem
     - UUID
     - Aufwandsentschädigung (Geld)
 - Rangsystem in einer Stadt
+  - Statthalter
   - Stadtverwalter
-  - Co-Stattverwalter
   - Stadtmitglied
   - Distriktverwalter
   - Distriktmitglied
   - Grundstückeigentümer
   - Grundstück-Miteigentümer
   - Grundstück-Mitbewohner
-- Economy
-  - Mieter/Käufer eines Grundstücks zahlt an die Stadt
-  - Stadt zahlt
-    - pro Fläche bürokratischen Verwaltungsaufwand
-    - pro Fläche an den Staat, der sie zugehörig sind, falls dass der Fall ist.
-  - Staat zahlt pro Städteanzahl wegen bürokratischen Verwaltungsaufwand ans System
 - Grundstück
   - Grundstücke, welche sich auf dem Server befinden werden in den RAM geladen.
   - Alle x Minuten und bei bestimmtn Aktionen (wie Grenzerweiterungen) werden die in die Mysql gespeichert.
@@ -268,7 +256,7 @@ Städtesystem
     - zukünftiger MonomentType (Standart NONE) (Typ, welcher der Stadtverwalter haben will)
     - Aktuelle Mietkosten
     - Zukünftige Mietkosten
-    - Mietkostendifferenz
+    - Mietkostendifferenz (Miete nicht bezahlt)
     - Aktuelle Kaufpreis
     - Zukünftiger Kaufpreis
     - Gemietet/Gekauft Seit Zeit
@@ -278,8 +266,9 @@ Städtesystem
     - Zukünftigen Status
     - Statuswechelzeit (Wann der Status gewechselt wird in millisekunden UNIX) (Wird per Config definiert wie lange bis zum Statuswechel ist)
     - Grundstückseigentümer
-    - Miteigentümer (Liste) (Personen, die auch für die Miete aufkommen sollen, falls der GsEigentümer nicht zahlen kann)
-    - Mitbewohner (Liste) (Personen, die NICHT für die Miete aufkommen werden, egal was ist)
+    - Ausgelagerte Daten:
+      - Miteigentümer (Liste) (Personen, die auch für die Miete aufkommen sollen, falls der GsEigentümer nicht zahlen kann)
+      - Mitbewohner (Liste) (Personen, die NICHT für die Miete aufkommen werden, egal was ist)
     - Aktuelle Redstoneblöcke
     - Maximale Redstoneblöcke (Redstonestaub, Repeater etc.) (Bei überschreitung des Levels wird das gesetzte Item als Block gelöscht)
       Wird dediziert eingestellt von dem Stadtverwalter. Die Anzahl dieser Blöcke wird von der Maxmimal Anzahl der Stadt dann subtrahiert.
