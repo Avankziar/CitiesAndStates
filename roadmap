@@ -146,7 +146,7 @@ Städtesystem
           - Gebetshaus (Wenn der MonomentType bestimmt wurde, darf keiner mehr abbauen.)
             - Religiöses kleinst Gebetshaus (bspw. kleine Kapellen etc.)
             - Religiöses kleines Gebetshaus (bspw. große Kapellen etc.)
-            - Religiöses nomales Gebetshaus (bspw. kleine Kirchen etc.)
+            - Religiöses normales Gebetshaus (bspw. kleine Kirchen etc.)
             - Religiöses großes Gebetshaus (bspw. Kirchen etc.)
             - Religiöses größtes Gebetshaus (bspw. große Kirchen etc. Kölner Dom oder so)
           - Kultstätte (Wenn der MonomentType bestimmt wurde, darf keiner mehr abbauen.)
@@ -239,7 +239,6 @@ Städtesystem
   - Distriktverwalter
   - Distriktmitglied
   - Grundstückeigentümer
-  - Grundstück-Miteigentümer
   - Grundstück-Mitbewohner
 - Grundstück
   - Grundstücke, welche sich auf dem Server befinden werden in den RAM geladen.
@@ -274,3 +273,18 @@ Städtesystem
       Wird dediziert eingestellt von dem Stadtverwalter. Die Anzahl dieser Blöcke wird von der Maxmimal Anzahl der Stadt dann subtrahiert.
     - Aktuelle Entitys
     - Maximale Entitys (Bei überschreitung des Levels, wird das Entity entfernt)
+- Grundstückeigentümer:
+  - Eigentümer des Grundstücks
+  - Zahlt hauptsächlich die Miete
+  - Mysql
+    - ID
+    - ID des Grundstücks
+    - UUID
+- Grundstückmitbewohner
+  - Mitbewohner
+  - Zahlt keine Miete, hat aber auch keine Rechte
+  - Kann jedoch im Falle des Mietrückstand, diesen begleichen.
+  - Mysql
+    - ID
+    - ID des Grundstücks
+    - UUID

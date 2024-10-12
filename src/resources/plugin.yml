@@ -1,0 +1,10 @@
+name: CityAndStates
+main: me.avankziar.cas.spigot.CAS
+version: 1
+author: Avankziar
+api-version: 1.19
+description: A City and State Plugin
+depend: [InterfaceHub]
+softdepend: [Vault,WorldGuard, WorldEdit]
+website: tba
+prefix: CAS
