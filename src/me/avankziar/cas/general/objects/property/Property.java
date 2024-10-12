@@ -504,18 +504,16 @@ public class Property extends Region3D implements MysqlHandable, MemoryHandable
 	
 	public void create()
 	{
-		final long now = this.creationTime;
 		CAS.getPlugin().getMysqlHandler().create(MysqlType.PROPERTY, this);
 		if(this.getServername().equals(CAS.getPlugin().getServername()))
 		{
-			Property p = (Property) CAS.getPlugin().getMysqlHandler().getData(MysqlType.PROPERTY, "`creation_time` = ?", now);
-			MemoryHandler.setProperty(p);
+			saveRAM();
 		}
 	}
 	
 	public void saveRAM()
 	{
-		MemoryHandler.setProperty(this);
+		MemoryHandler.addProperty(getId(), this);
 	}
 	
 	public void saveMysql()

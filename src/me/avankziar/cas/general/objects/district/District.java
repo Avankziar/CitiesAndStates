@@ -254,18 +254,16 @@ public class District extends Region3D implements MysqlHandable, MemoryHandable
 	
 	public void create()
 	{
-		final long now = this.creationTime;
 		CAS.getPlugin().getMysqlHandler().create(MysqlType.DISTRICT, this);
 		if(this.getServername().equals(CAS.getPlugin().getServername()))
 		{
-			District p = (District) CAS.getPlugin().getMysqlHandler().getData(MysqlType.DISTRICT, "`creation_time` = ?", now);
-			MemoryHandler.setDistrict(p);
+			saveRAM();
 		}
 	}
 	
 	public void saveRAM()
 	{
-		MemoryHandler.setDistrict(this);
+		MemoryHandler.addDistrict(getId(), this);
 	}
 	
 	public void saveMysql()

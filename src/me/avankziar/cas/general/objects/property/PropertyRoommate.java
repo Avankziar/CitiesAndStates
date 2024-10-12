@@ -196,13 +196,13 @@ public class PropertyRoommate implements MysqlHandable, MemoryHandable
 		{
 			PropertyRoommate po = (PropertyRoommate) CAS.getPlugin().getMysqlHandler().getData(MysqlType.PROPERTY_ROOMMATE,
 					"`property_id` = ? AND `player_uuid` = ?", pid, uuid.toString());
-			MemoryHandler.setPropertyRoommate(po);
+			MemoryHandler.addPropertyRoommate(po.getId(), po);
 		}
 	}
 	
 	public void saveRAM()
 	{
-		MemoryHandler.setPropertyRoommate(this);
+		MemoryHandler.addPropertyRoommate(getId(), this);
 	}
 	
 	public void saveMysql()

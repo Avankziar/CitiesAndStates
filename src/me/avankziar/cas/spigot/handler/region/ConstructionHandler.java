@@ -9,6 +9,9 @@ import me.avankziar.cas.general.objects.Region3D;
 import me.avankziar.cas.general.objects.property.Property;
 import me.avankziar.cas.general.objects.property.Property.PropertyStatus;
 
+/**
+ * Handle the break and place of blocks.
+ */
 public class ConstructionHandler
 {
 	private static CopyOnWriteArrayList<UUID> bypassConstruction = new CopyOnWriteArrayList<>(); //Player which bypass

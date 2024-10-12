@@ -14,7 +14,6 @@ import me.avankziar.cas.general.database.MysqlType;
 import me.avankziar.cas.general.database.QueryType;
 import me.avankziar.cas.spigot.CAS;
 import me.avankziar.cas.spigot.database.MysqlHandler;
-import me.avankziar.cas.spigot.handler.region.CityHandler;
 import me.avankziar.cas.spigot.handler.region.MemoryHandler;
 
 public class CityManager implements MysqlHandable, MemoryHandable
@@ -204,20 +203,16 @@ public class CityManager implements MysqlHandable, MemoryHandable
 	public void create()
 	{
 		final long cid = this.cityID;
-		final UUID uuid = this.uuid;
-		City cy = CityHandler.getCity(cid);
 		CAS.getPlugin().getMysqlHandler().create(MysqlType.CITY_MANAGER, this);
-		if(cy != null)
+		if(MemoryHandler.getCity(cid) != null)
 		{
-			CityManager o = (CityManager) CAS.getPlugin().getMysqlHandler().getData(MysqlType.CITY_MANAGER,
-					"`city_id` = ? AND `player_uuid` = ?", cid, uuid.toString());
-			MemoryHandler.setCityManager(o);
+			saveRAM();
 		}
 	}
 	
 	public void saveRAM()
 	{
-		MemoryHandler.setCityManager(this);
+		MemoryHandler.addCityManager(getId(), this);
 	}
 	
 	public void saveMysql()

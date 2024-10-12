@@ -32,7 +32,7 @@ public class CityFlag implements MysqlHandable
 		return ImmutableList.copyOf(attributes);
 	}
 	
-	public static void init(YamlHandler y)
+	public static void initialize(YamlHandler y)
 	{
 		YamlConfiguration yca = y.getConfig_CityFlags();
 		for(String un : y.getConfig_CityFlags().getKeys(false))

@@ -275,13 +275,13 @@ public class City extends Region3D implements MysqlHandable, MemoryHandable
 		if(this.getServername().equals(CAS.getPlugin().getServername()))
 		{
 			City p = (City) CAS.getPlugin().getMysqlHandler().getData(MysqlType.CITY, "`creation_time` = ?", now);
-			MemoryHandler.setCity(p);
+			MemoryHandler.addCity(p.getId(), p);
 		}
 	}
 	
 	public void saveRAM()
 	{
-		MemoryHandler.setCity(this);
+		MemoryHandler.addCity(getId(), this);
 	}
 	
 	public void saveMysql()

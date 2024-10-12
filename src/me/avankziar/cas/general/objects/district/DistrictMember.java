@@ -14,7 +14,6 @@ import me.avankziar.cas.general.database.MysqlType;
 import me.avankziar.cas.general.database.QueryType;
 import me.avankziar.cas.spigot.CAS;
 import me.avankziar.cas.spigot.database.MysqlHandler;
-import me.avankziar.cas.spigot.handler.region.DistrictHandler;
 import me.avankziar.cas.spigot.handler.region.MemoryHandler;
 
 public class DistrictMember implements MysqlHandable, MemoryHandable
@@ -204,20 +203,16 @@ public class DistrictMember implements MysqlHandable, MemoryHandable
 	public void create()
 	{
 		final long pid = this.districtID;
-		final UUID uuid = this.uuid;
-		District dis = DistrictHandler.getDistrict(pid);
 		CAS.getPlugin().getMysqlHandler().create(MysqlType.DISTRICT_MEMBER, this);
-		if(dis != null)
+		if(MemoryHandler.getDistrict(pid) != null)
 		{
-			DistrictMember o = (DistrictMember) CAS.getPlugin().getMysqlHandler().getData(MysqlType.DISTRICT_MEMBER,
-					"`district_id` = ? AND `player_uuid` = ?", pid, uuid.toString());
-			MemoryHandler.setDistrictMember(o);
+			saveRAM();
 		}
 	}
 	
 	public void saveRAM()
 	{
-		MemoryHandler.setDistrictMember(this);
+		MemoryHandler.addDistrictMember(getId(), this);
 	}
 	
 	public void saveMysql()

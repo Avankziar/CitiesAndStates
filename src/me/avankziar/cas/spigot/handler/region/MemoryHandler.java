@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import me.avankziar.cas.general.database.MysqlType;
 import me.avankziar.cas.general.objects.Region3D;
 import me.avankziar.cas.general.objects.city.City;
 import me.avankziar.cas.general.objects.city.CityFlag;
@@ -17,6 +18,8 @@ import me.avankziar.cas.general.objects.district.DistrictMember;
 import me.avankziar.cas.general.objects.property.Property;
 import me.avankziar.cas.general.objects.property.PropertyOwner;
 import me.avankziar.cas.general.objects.property.PropertyRoommate;
+import me.avankziar.cas.spigot.CAS;
+import me.avankziar.cas.spigot.database.MysqlHandler;
 
 /**
  * Useage by Event which have a demanding respond time, like blockbreak etc.
@@ -24,6 +27,85 @@ import me.avankziar.cas.general.objects.property.PropertyRoommate;
  */
 public class MemoryHandler
 {
+	private static void log(boolean log, String msg)
+	{
+		if(log)
+		{
+			CAS.log.info(msg);
+		}
+	}
+	public static void initialize(boolean log)
+	{
+		MysqlHandler sql = CAS.getPlugin().getMysqlHandler();
+		String server = CAS.getPlugin().getServername();
+		ArrayList<City> city = City.convert(sql.getFullList(MysqlType.CITY, "`id` ASC",
+				"`server_name` = ?", server));
+		log(log, "MemoryHandler loading for this server %x%...".replace("%x%", server));
+		log(log, ">> Load %x% Cities".replace("%x%", String.valueOf(city.size())));
+		long cityflag = 0;
+		long citymanager = 0;
+		long citymember = 0;
+		for(City c : city)
+		{
+			addCity(c.getId(), c.getRegion());
+			ArrayList<CityFlag> cf = CityFlag.convert(sql.getFullList(MysqlType.CITY_FLAGS, "`id` ASC",
+					"`city_id` = ?", c.getId()));
+			cityflag += cf.size();
+			cf.stream().forEach(x -> addCityFlag(x));
+			ArrayList<CityManager> cma = CityManager.convert(sql.getFullList(MysqlType.CITY_MANAGER, "`id` ASC",
+					"`city_id` = ?", c.getId()));
+			citymanager += cma.size();
+			cma.stream().forEach(x -> addCityManager(x.getId(), x));
+			ArrayList<CityMember> cme = CityMember.convert(sql.getFullList(MysqlType.CITY_MEMBER, "`id` ASC",
+					"`city_id` = ?", c.getId()));
+			citymember += cme.size();
+			cme.stream().forEach(x -> addCityMember(x.getId(), x));
+		}
+		log(log, ">> Load %x% CityFlags".replace("%x%", String.valueOf(cityflag)));
+		log(log, ">> Load %x% CityManagers".replace("%x%", String.valueOf(citymanager)));
+		log(log, ">> Load %x% CityMembers".replace("%x%", String.valueOf(citymember)));
+		
+		ArrayList<District> district = District.convert(sql.getFullList(MysqlType.DISTRICT, "`id` ASC",
+				"`server_name` = ?", server));
+		log(log, ">> Load %x% Districts".replace("%x%", String.valueOf(district.size())));
+		long districtmanager = 0;
+		long districtmember = 0;
+		for(District d : district)
+		{
+			addDistrict(d.getId(), d.getRegion());
+			ArrayList<DistrictManager> dma = DistrictManager.convert(sql.getFullList(MysqlType.DISTRICT_MANAGER, "`id` ASC",
+					"`district_id` = ?", d.getId()));
+			districtmanager += dma.size();
+			dma.stream().forEach(x -> addDistrictManager(x.getId(), x));
+			ArrayList<DistrictMember> dme = DistrictMember.convert(sql.getFullList(MysqlType.DISTRICT_MEMBER, "`id` ASC",
+					"`district_id` = ?", d.getId()));
+			districtmember += dme.size();
+			dme.stream().forEach(x -> addDistrictMember(x.getId(), x));
+		}
+		log(log, ">> Load %x% DistrictManagers".replace("%x%", String.valueOf(districtmanager)));
+		log(log, ">> Load %x% DistrictMembers".replace("%x%", String.valueOf(districtmember)));
+		
+		ArrayList<Property> property = Property.convert(sql.getFullList(MysqlType.PROPERTY, "`id` ASC",
+				"`server_name` = ?", server));
+		log(log, ">> Load %x% Properties".replace("%x%", String.valueOf(property.size())));
+		long propertyowner = 0;
+		long propertyroommate = 0;
+		for(Property p : property)
+		{
+			addProperty(p.getId(), p);
+			ArrayList<PropertyOwner> pow = PropertyOwner.convert(sql.getFullList(MysqlType.PROPERTY_OWNER, "`id` ASC",
+					"`property_id`", p.getId()));
+			pow.stream().forEach(x -> addPropertyOwner(x.getId(), x));
+			propertyowner += pow.size();
+			ArrayList<PropertyRoommate> pro = PropertyRoommate.convert(sql.getFullList(MysqlType.PROPERTY_ROOMMATE, "`id` ASC",
+					"`property_id`", p.getId()));
+			propertyroommate += pro.size();
+			pro.stream().forEach(x -> addPropertyRoommate(x.getId(), x));
+		}
+		log(log, ">> Load %x% PropertyOwners".replace("%x%", String.valueOf(propertyowner)));
+		log(log, ">> Load %x% PropertyRoommates".replace("%x%", String.valueOf(propertyroommate)));
+	}
+	
 	private static ConcurrentHashMap<Long, PropertyRoommate> property_roommate = new ConcurrentHashMap<>();
 	
 	public static void addPropertyRoommate(long propertyRoommateID, PropertyRoommate propertyRoommate)
@@ -39,15 +121,6 @@ public class MemoryHandler
 	public static PropertyRoommate getPropertyRoommate(long property_RoommateID)
 	{
 		return property_roommate.get(property_RoommateID);
-	}
-	
-	public static void setPropertyRoommate(PropertyRoommate propertyRoommate)
-	{
-		if(propertyRoommate == null || propertyRoommate.getId() < 1)
-		{
-			return;
-		}
-		property_roommate.put(propertyRoommate.getId(), propertyRoommate);
 	}
 	
 	public static Collection<PropertyRoommate> getPropertyRoommates()
@@ -74,15 +147,6 @@ public class MemoryHandler
 		return property_owner.get(property_OwnerID);
 	}
 	
-	public static void setPropertyOwner(PropertyOwner propertyOwner)
-	{
-		if(propertyOwner == null || propertyOwner.getId() < 1)
-		{
-			return;
-		}
-		property_owner.put(propertyOwner.getId(), propertyOwner);
-	}
-	
 	public static Collection<PropertyOwner> getPropertyOwner()
 	{
 		return property_owner.values();
@@ -105,15 +169,6 @@ public class MemoryHandler
 	public static Property getProperty(long propertyid)
 	{
 		return property.get(propertyid);
-	}
-	
-	public static void setProperty(Property property)
-	{
-		if(property == null || property.getId() < 1)
-		{
-			return;
-		}
-		MemoryHandler.property.put(property.getId(), property);
 	}
 	
 	public static Set<Entry<Long, Property>> getProperties()
@@ -140,15 +195,6 @@ public class MemoryHandler
 		return district_member.get(id);
 	}
 	
-	public static void setDistrictMember(DistrictMember districtMember)
-	{
-		if(districtMember == null || districtMember.getId() < 1)
-		{
-			return;
-		}
-		MemoryHandler.district_member.put(districtMember.getId(), districtMember);
-	}
-	
 	public static Collection<DistrictMember> getDistrictMember()
 	{
 		return district_member.values();
@@ -171,15 +217,6 @@ public class MemoryHandler
 	public static DistrictManager getDistrictManager(long id)
 	{
 		return district_manager.get(id);
-	}
-	
-	public static void setDistrictManager(DistrictManager districtManager)
-	{
-		if(districtManager == null || districtManager.getId() < 1)
-		{
-			return;
-		}
-		MemoryHandler.district_manager.put(districtManager.getId(), districtManager);
 	}
 	
 	public static Collection<DistrictManager> getDistrictManager()
@@ -206,15 +243,6 @@ public class MemoryHandler
 		return district.get(id);
 	}
 	
-	public static void setDistrict(District district)
-	{
-		if(district == null || district.getId() < 1)
-		{
-			return;
-		}
-		MemoryHandler.district.put(district.getId(), district);
-	}
-	
 	public static Set<Entry<Long, Region3D>> getDistrict()
 	{
 		return district.entrySet();
@@ -237,15 +265,6 @@ public class MemoryHandler
 	public static CityMember getCityMember(long id)
 	{
 		return city_member.get(id);
-	}
-	
-	public static void setCityMember(CityMember cityMember)
-	{
-		if(cityMember == null || cityMember.getId() < 1)
-		{
-			return;
-		}
-		MemoryHandler.city_member.put(cityMember.getId(), cityMember);
 	}
 	
 	public static Collection<CityMember> getCityMember()
@@ -272,15 +291,6 @@ public class MemoryHandler
 		return city_manager.get(id);
 	}
 	
-	public static void setCityManager(CityManager cityManager)
-	{
-		if(cityManager == null || cityManager.getId() < 1)
-		{
-			return;
-		}
-		MemoryHandler.city_manager.put(cityManager.getId(), cityManager);
-	}
-	
 	public static Collection<CityManager> getCityManager()
 	{
 		return city_manager.values();
@@ -304,15 +314,6 @@ public class MemoryHandler
 	public static Region3D getCity(long id)
 	{
 		return city.get(id);
-	}
-	
-	public static void setCity(City city)
-	{
-		if(city == null || city.getId() < 1)
-		{
-			return;
-		}
-		MemoryHandler.city.put(city.getId(), city.getRegion());
 	}
 	
 	public static Set<Entry<Long, Region3D>> getCity()
@@ -355,7 +356,28 @@ public class MemoryHandler
 	
 	public static void removeCityFlag(long cityID, long cityFlagID)
 	{
-		city_manager.remove(cityManagerID);
+		ArrayList<CityFlag> cf = new ArrayList<>();
+		if(city_flags.contains(cityID))
+		{
+			cf = city_flags.get(cityID);
+		}
+		int index = -1;
+		for(CityFlag cfs : cf)
+		{
+			if(index < 0)
+			{
+				index = 0;
+			}
+			if(cfs.getId() == cityFlagID)
+			{
+				break;
+			}
+			index++;
+		}
+		if(index >= 0)
+		{
+			cf.remove(index);
+		}
 	}
 	
 	public static ArrayList<CityFlag> getCityAttributes(long id)

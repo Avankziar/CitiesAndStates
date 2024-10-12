@@ -45,6 +45,7 @@ import me.avankziar.cas.spigot.gui.listener.BottomListener;
 import me.avankziar.cas.spigot.gui.listener.GuiPreListener;
 import me.avankziar.cas.spigot.gui.listener.UpperListener;
 import me.avankziar.cas.spigot.handler.ConfigHandler;
+import me.avankziar.cas.spigot.handler.region.MemoryHandler;
 import me.avankziar.cas.spigot.hook.WorldGuardHook;
 import me.avankziar.cas.spigot.listener.ConstructionListener;
 import me.avankziar.cas.spigot.listener.PlayerJoinListener;
@@ -123,9 +124,14 @@ public class CAS extends JavaPlugin
 			return;
 		}
 		
+		//Setup a config as variable in ConfigHandler
 		ConfigHandler.config = getYamlHandler().getConfig();
+		//Set the YamlHandler as variable in BaseConstructor
 		BaseConstructor.init(yamlHandler);
-		CityFlag.init(yamlHandler);
+		//Load the Cityflag from files
+		CityFlag.initialize(yamlHandler);
+		//Load all needed data from mysql into memory
+		MemoryHandler.initialize(true);
 		
 		utility = new Utility(plugin);
 		backgroundTask = new BackgroundTask(this);
@@ -140,7 +146,6 @@ public class CAS extends JavaPlugin
 	
 	public void onDisable()
 	{
-		log.info(pluginname + " despawn all Holograms");
 		Bukkit.getScheduler().cancelTasks(this);
 		HandlerList.unregisterAll(this);
 		log.info(pluginname + " is disabled!");

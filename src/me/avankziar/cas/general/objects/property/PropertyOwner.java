@@ -15,7 +15,6 @@ import me.avankziar.cas.general.database.QueryType;
 import me.avankziar.cas.spigot.CAS;
 import me.avankziar.cas.spigot.database.MysqlHandler;
 import me.avankziar.cas.spigot.handler.region.MemoryHandler;
-import me.avankziar.cas.spigot.handler.region.PropertyHandler;
 
 //Owner of Property, if was rented oder buyed
 public class PropertyOwner implements MysqlHandable, MemoryHandable
@@ -189,20 +188,16 @@ public class PropertyOwner implements MysqlHandable, MemoryHandable
 	public void create()
 	{
 		final long pid = this.propertyID;
-		final UUID uuid = this.uuid;
-		Property pro = PropertyHandler.getProperty(pid);
 		CAS.getPlugin().getMysqlHandler().create(MysqlType.PROPERTY_OWNER, this);
-		if(pro != null)
+		if(MemoryHandler.getProperty(pid) != null)
 		{
-			PropertyOwner po = (PropertyOwner) CAS.getPlugin().getMysqlHandler().getData(MysqlType.PROPERTY_OWNER,
-					"`property_id` = ? AND `player_uuid` = ?", pid, uuid.toString());
-			MemoryHandler.setPropertyOwner(po);
+			saveRAM();
 		}
 	}
 	
 	public void saveRAM()
 	{
-		MemoryHandler.setPropertyOwner(this);
+		MemoryHandler.addPropertyOwner(getId(), this);
 	}
 	
 	public void saveMysql()
