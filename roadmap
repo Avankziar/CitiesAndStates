@@ -3,8 +3,6 @@
 ##############
 Städtesystem
 
-- OnDisable
-  - Alle Objecte im RAM sollten in die Mysql geupdatet werden.
 - Stadt
   - Alle Städte können sich die Welt teilen.
   - Städte, welche auf dem Server existieren, werden im RAM gehalten.

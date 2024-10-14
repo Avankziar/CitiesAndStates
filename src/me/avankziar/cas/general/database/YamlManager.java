@@ -25,6 +25,7 @@ public class YamlManager
 	
 	//Per Flatfile a linkedhashmap.
 	private static LinkedHashMap<String, Language> configSpigotKeys = new LinkedHashMap<>();
+	private static LinkedHashMap<String, Language> configCityKeys = new LinkedHashMap<>();
 	private static LinkedHashMap<String, Language> configCityFlagsKeys = new LinkedHashMap<>();
 	private static LinkedHashMap<String, Language> commandsKeys = new LinkedHashMap<>();
 	private static LinkedHashMap<String, Language> languageKeys = new LinkedHashMap<>();
@@ -35,6 +36,7 @@ public class YamlManager
 	public YamlManager()
 	{
 		initConfig();
+		initConfigCity();
 		initConfigCityFlags();
 		initCommands();
 		initLanguage();
@@ -67,6 +69,11 @@ public class YamlManager
 	public LinkedHashMap<String, Language> getConfigSpigotKey()
 	{
 		return configSpigotKeys;
+	}
+	
+	public LinkedHashMap<String, Language> getConfigCityKey()
+	{
+		return configCityFlagsKeys;
 	}
 	
 	public LinkedHashMap<String, Language> getConfigCityFlagsKey()
@@ -195,6 +202,18 @@ public class YamlManager
 	{
 		configSpigotKeys.put(path, new Language(new ISO639_2B[] {ISO639_2B.GER}, c));
 		addComments(configSpigotKeys, "#"+path, o);
+	}
+	
+	private void addConfigCity(String path, Object[] c, Object[] o)
+	{
+		configCityKeys.put(path, new Language(new ISO639_2B[] {ISO639_2B.GER}, c));
+		addComments(configCityKeys, "#"+path, o);
+	}
+	
+	private void addConfigCityFlags(String path, Object[] c, Object[] o)
+	{
+		configCityFlagsKeys.put(path, new Language(new ISO639_2B[] {ISO639_2B.GER}, c));
+		addComments(configCityFlagsKeys, "#"+path, o);
 	}
 	
 	public void initConfig() //INFO:Config
@@ -592,52 +611,62 @@ public class YamlManager
 				"With LOCATION, only the location of the store and a few other details are written via chat. With TELEPORT the player is teleported."});*/
 	}
 	
-	public void initConfigCityFlags() //INFO:ConfigCityAttributes
+	public void initConfigCity() //INFO:ConfigCity
+	{
+		addConfigCity("MinimumDistanceBetweenCities", new Object[] {
+				100}, new Object[] {
+				"",
+				"Die Minimum Distanze zwischen Städte, wenn eine neue gegründet wird.",
+				"",
+				"The minimum distance between cities when a new one is founded."});
+	}
+	
+	public void initConfigCityFlags() //INFO:ConfigCityFlags
 	{
 		String path = "PLAYER_VS_PLAYER";
-		addConfig(path+".Displayname", new Object[] {
+		addConfigCityFlags(path+".Displayname", new Object[] {
 				"Player vs. Player"}, new Object[] {
 				"",
 				"Anzeigename des CityAttributes.",
 				"",
 				"Display name of the CityAttribute."});
-		addConfig(path+".DefaultResultIfNotSpecified", new Object[] {
+		addConfigCityFlags(path+".DefaultResultIfNotSpecified", new Object[] {
 				Result.ALLOW.toString()}, new Object[] {
 				"",
 				"Das Resultat, wenn man das CityAttribute noch nicht in der City hat. Möglichkeiten: ALLOW, DENY.",
 				"",
 				"The result if you do not yet have the CityAttribute in the city. Possibilities: ALLOW, DENY."});
-		addConfig(path+".CooldownToChangeActiveStatus", new Object[] {
+		addConfigCityFlags(path+".CooldownToChangeActiveStatus", new Object[] {
 				"0000-14-00:00"}, new Object[] {
 				"",
 				"Zeitformat ab wann man das CityAttribute wieder aktiv schalten kann. In 'yyyy-dd-HH:mm'.",
 				"",
 				"Time format from when the CityAttribute can be activated again. In 'yyyy-dd-HH:mm'."});
-		addConfig(path+".BuyCosts", new Object[] {
+		addConfigCityFlags(path+".BuyCosts", new Object[] {
 				10000.0}, new Object[] {
 				"",
 				"Kosten, die beim Kauf des CityAttributes entstehen.",
 				"",
 				"Costs incurred when purchasing the CityAttribute."});
-		addConfig(path+".BuyableAtCityLevel", new Object[] {
+		addConfigCityFlags(path+".BuyableAtCityLevel", new Object[] {
 				1}, new Object[] {
 				"",
 				"Level der City, ab wann man das CityAttribute kaufen kann. Niedrigstes CityLevel ist 0 bis maximal 9.",
 				"",
 				"Level of the city, from when you can buy the city attribute. The lowest city level is 0 to a maximum of 9."});
-		addConfig(path+".ActivationCosts", new Object[] {
+		addConfigCityFlags(path+".ActivationCosts", new Object[] {
 				1000.0}, new Object[] {
 				"",
 				"Kosten um das CityAttribute wieder zu aktivieren, nachdem es deaktiviert worden war.",
 				"",
 				"Costs to reactivate the CityAttribute after it had been deactivated."});
-		addConfig(path+".AdministrativeExpensedIfActive", new Object[] {
+		addConfigCityFlags(path+".AdministrativeExpensedIfActive", new Object[] {
 				1000.0}, new Object[] {
 				"",
 				"Die Verwaltungskosten des CityAttributes, wenn es aktiv ist.",
 				"",
 				"The administrative costs of the CityAttribute when it is active."});
-		addConfig(path+".AdministrativeExpensedIfDeactive", new Object[] {
+		addConfigCityFlags(path+".AdministrativeExpensedIfDeactive", new Object[] {
 				1.0}, new Object[] {
 				"",
 				"Die Verwaltungskosten des CityAttributes, wenn es inaktiv ist.",

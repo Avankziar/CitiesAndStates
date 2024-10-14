@@ -316,7 +316,7 @@ public class MemoryHandler
 		return city.get(id);
 	}
 	
-	public static Set<Entry<Long, Region3D>> getCity()
+	public static Set<Entry<Long, Region3D>> getCities()
 	{
 		return city.entrySet();
 	}

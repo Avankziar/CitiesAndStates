@@ -1,5 +1,10 @@
 package me.avankziar.cas.general.objects.city;
 
+import java.util.LinkedHashMap;
+import java.util.logging.Level;
+
+import me.avankziar.cas.spigot.CAS;
+
 public enum CityLevel
 {
 	CAMP(0), //Lager
@@ -13,6 +18,27 @@ public enum CityLevel
 	METROPOLIS(8), //Metropole
 	CITY_STATE(9) //Stadtstaat
 	;
+	
+	private static final LinkedHashMap<Integer, CityLevel> values = new LinkedHashMap<>();
+	
+	static
+	{
+		try
+		{
+			for(CityLevel mt : CityLevel.values())
+			{
+				values.put(mt.getOrdinal(), mt);
+			}
+		} catch(Exception e)
+		{
+			CAS.log.log(Level.SEVERE, "SecurityLevel not initialized!");
+		}
+	}
+	
+	public static CityLevel get(int ordinal)
+	{
+		return values.get(ordinal);
+	}
 	
 	private int ordinal;
 	

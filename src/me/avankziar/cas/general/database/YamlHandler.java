@@ -22,6 +22,9 @@ public class YamlHandler implements YamlHandling
 	private File config = null;
 	private YamlConfiguration cfg = new YamlConfiguration();
 	
+	private File config_city = null;
+	private YamlConfiguration cfg_city= new YamlConfiguration();
+	
 	private File config_cityflags = null;
 	private YamlConfiguration cfg_cityflags = new YamlConfiguration();
 	
@@ -48,6 +51,11 @@ public class YamlHandler implements YamlHandling
 	public YamlConfiguration getConfig()
 	{
 		return cfg;
+	}
+	
+	public YamlConfiguration getConfig_City()
+	{
+		return cfg_city;
 	}
 	
 	public YamlConfiguration getConfig_CityFlags()
@@ -182,6 +190,25 @@ public class YamlHandler implements YamlHandling
 			return false;
 		}
 		writeFile(commands, com, plugin.getYamlManager().getCommandsKey());
+		
+		config_city = new File(plugin.getDataFolder(), "config_city.yml");
+		if(!config_city.exists()) 
+		{
+			CAS.log.info("Create config_city.yml...");
+			try(InputStream in = plugin.getResource("default.yml"))
+			{
+				Files.copy(in, config_city.toPath());
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		cfg_city = loadYamlTask(config_city, cfg_city);
+		if (cfg_city == null)
+		{
+			return false;
+		}
+		writeFile(config_city, cfg_city, plugin.getYamlManager().getConfigCityKey());
 		
 		config_cityflags = new File(plugin.getDataFolder(), "config_cityflags.yml");
 		if(!config_cityflags.exists()) 

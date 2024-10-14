@@ -263,6 +263,10 @@ public class District extends Region3D implements MysqlHandable, MemoryHandable
 	
 	public void saveRAM()
 	{
+		if(!this.getServername().equals(CAS.getPlugin().getServername()))
+		{
+			return;
+		}
 		MemoryHandler.addDistrict(getId(), this);
 	}
 	
