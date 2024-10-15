@@ -619,6 +619,45 @@ public class YamlManager
 				"Die Minimum Distanze zwischen Städte, wenn eine neue gegründet wird.",
 				"",
 				"The minimum distance between cities when a new one is founded."});
+		addConfigCity("ExpandCity.MoneyCost", new Object[] {
+				"10000;default;1.0",
+				"10000;vault;1.0",
+				""}, new Object[] {
+				"",
+				"Die Kosten von einer Blocklänge um eine Stadt zu erweitern. Für Geldwerte.",
+				"Das Symbol ; trennt die einzelenen Werte.",
+				"Erster Wert gibt an bis wieviel Blockfläche die weiteren Werte gelten.",
+				"ACHTUNG! Das Plugin kontrolliert NICHT, ob eine kleinere Erweiterung günstiger wäre. Er nimmt die endgültige Fläche an Wert an!",
+				"Zweiter Wert gibt die Währung an. vault für Vaultsysteme, alles andere für IFH. default für Standart IFH.",
+				"Dritter Wert gibt die Menge an Geld an.",
+				"",
+				""});
+		addConfigCity("ExpandCity.ExpCost", new Object[] {
+				"10000;2",
+				"100000;1",
+				""}, new Object[] {
+				"",
+				"Die Kosten von einer Blocklänge um eine Stadt zu erweitern. Für Erfahrung.",
+				"Das Symbol ; trennt die einzelenen Werte.",
+				"Erster Wert gibt an bis wieviel Blockfläche die weiteren Werte gelten.",
+				"ACHTUNG! Das Plugin kontrolliert NICHT, ob eine kleinere Erweiterung günstiger wäre. Er nimmt die endgültige Fläche an Wert an!",
+				"Zweiter Wert gibt die Anzahl an Erfahrung an.",
+				"",
+				""});
+		addConfigCity("ExpandCity.MaterialCost", new Object[] {
+				"10000;DIAMOND;1",
+				"100000;DIAMOND;2",
+				""}, new Object[] {
+				"",
+				"Die Kosten von einer Blocklänge um eine Stadt zu erweitern. Für Geldwerte.",
+				"Das Symbol ; trennt die einzelenen Werte.",
+				"Erster Wert gibt an bis wieviel Blockfläche die weiteren Werte gelten.",
+				"ACHTUNG! Das Plugin kontrolliert NICHT, ob eine kleinere Erweiterung günstiger wäre. Er nimmt die endgültige Fläche an Wert an!",
+				"Zweiter Wert gibt das Material an.",
+				"Dritter Wert gibt die Menge an Material an.",
+				"",
+				""});
+		
 	}
 	
 	public void initConfigCityFlags() //INFO:ConfigCityFlags
@@ -934,6 +973,56 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cBitte nutze den Befehl mit einem weiteren Argument aus der Tabliste!",
 						"&cPlease use the command with another argument from the tab list!"}));
+		initCity();
+	}
+	
+	public void initCity()
+	{
+		languageKeys.put("City.NotInCity",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDu bist in keiner Stadt!",
+						""}));
+		languageKeys.put("City.CannotDetermineDirection",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cBitte schaue ungefähr in eine der 4 Himmelsrichtungen!",
+						""}));
+		
+		languageKeys.put("City.Expand.IntersectCity",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDu kannst keine %blocklenght% Blöcke erweitern, dort ist schon eine Stadt. &eMaximale mögliche Erweiterung: &f%possibleblocklenght%",
+						""}));
+		languageKeys.put("City.Expand.FormulaFailure", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDie Formel zur Stadterweiterung hat einen Fehler! Abbruch!",
+						"&c"}));
+		languageKeys.put("City.Expand.Direction.NORTH",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"Norden",
+						""}));
+		languageKeys.put("City.Expand.Direction.EAST",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"Osten",
+						""}));
+		languageKeys.put("City.Expand.Direction.SOUTH",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"Süden",
+						""}));
+		languageKeys.put("City.Expand.Direction.WEST",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"Westen",
+						""}));
+		languageKeys.put("City.Expand.CostHeadline",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"Für die Erweiterung nach %direction% mit %blocklenght% Blöcken, fallen folgende Kosten an:",
+						""}));
+		languageKeys.put("City.Expand.Category", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&6Stadterweiterung",
+						"&6Cityexpand"}));
+		languageKeys.put("City.Expand.Comment", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&bKauf von %blocklenght% Blöcken in Richtung %direction%.",
+						"&bPurchase of %blocklenght% blocks in direction %direction%."}));
 	}
 	
 	public void initModifierValueEntryLanguage() //INFO:ModifierValueEntryLanguages

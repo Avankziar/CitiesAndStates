@@ -75,4 +75,49 @@ public class Region3D
 				&& getMaximumPoint().getY() == region.getMaximumPoint().getY()
 				&& getMaximumPoint().getZ() == region.getMaximumPoint().getZ();
 	}
+	
+	public long getArea()
+	{
+		long x = (long) (getMaximumPoint().getBlockX() - getMinimumPoint().getBlockX());
+		if(x < 0)
+		{
+			x = x * -1;
+		}
+		long z = (long) (getMaximumPoint().getBlockZ() - getMinimumPoint().getBlockZ());
+		if(z < 0)
+		{
+			z = z * -1;
+		}
+		return x * z;
+	}
+	
+	public double getXAbsolutLenght()
+	{
+		double d = getMaximumPoint().getX() - getMinimumPoint().getX();
+		if(d < 0)
+		{
+			d = d * -1.0;
+		}
+		return d;
+	}
+	
+	public double getYAbsolutLenght()
+	{
+		double d = getMaximumPoint().getY() - getMinimumPoint().getY();
+		if(d < 0)
+		{
+			d = d * -1.0;
+		}
+		return d;
+	}
+	
+	public double getZAbsolutLenght()
+	{
+		double d = getMaximumPoint().getZ() - getMinimumPoint().getZ();
+		if(d < 0)
+		{
+			d = d * -1.0;
+		}
+		return d;
+	}
 }

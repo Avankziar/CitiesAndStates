@@ -72,7 +72,7 @@ public class MemoryHandler
 		long districtmember = 0;
 		for(District d : district)
 		{
-			addDistrict(d.getId(), d.getRegion());
+			addDistrict(d.getId(), d);
 			ArrayList<DistrictManager> dma = DistrictManager.convert(sql.getFullList(MysqlType.DISTRICT_MANAGER, "`id` ASC",
 					"`district_id` = ?", d.getId()));
 			districtmanager += dma.size();
@@ -226,9 +226,9 @@ public class MemoryHandler
 	
 	//--------------
 	
-	private static ConcurrentHashMap<Long, Region3D> district = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<Long, District> district = new ConcurrentHashMap<>();
 	
-	public static void addDistrict(long districtID, Region3D district)
+	public static void addDistrict(long districtID, District district)
 	{
 		MemoryHandler.district.put(districtID, district);
 	}
@@ -243,7 +243,7 @@ public class MemoryHandler
 		return district.get(id);
 	}
 	
-	public static Set<Entry<Long, Region3D>> getDistrict()
+	public static Set<Entry<Long, District>> getDistrict()
 	{
 		return district.entrySet();
 	}
