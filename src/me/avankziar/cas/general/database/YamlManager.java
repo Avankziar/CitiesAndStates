@@ -759,54 +759,6 @@ public class YamlManager
 				"&bCommandright for &f/vss storage",
 				"&eBefehl für den Zwischenbefehl.",
 				"&eCommand for the intermediate command.");
-		argumentInput("vss_debug", "debug", basePermission,
-				"/vss debug <xxx>", "/vss debug ", false,
-				"&c/vss debug <xxx> &f| Zu Testzwecken des Plugin. Benutzung auf eigene Gefahr.",
-				"&c/vss debug <xxx> &f| For testing the plugin. Use at your own risk.",
-				"&bBefehlsrecht für &f/vss debug",
-				"&bCommandright for &f/vss debug",
-				"&eZu Testzwecken des Plugin. Benutzung auf eigene Gefahr.",
-				"&eFor testing the plugin. Use at your own risk.");
-		argumentInput("vss_storage_delete", "delete", basePermission,
-				"/vss storage delete <xxx:yyy...>", "/vss storage delete ", false,
-				"&c/vss storage delete <xxx:yyy...> &f| Löscht alle Shops nach den Parameter(xxx). Param. sind id, player, server, world, item, radius.",
-				"&c/vss storage delete <xxx:yyy...> &f| Deletes all stores after the parameter(xxx). Param. are id, player, server, world, item, radius.",
-				"&bBefehlsrecht für &f/vss storage delete",
-				"&bCommandright for &f/vss storage delete",
-				"&eBefehl zum Löschen von Shops über Parameterangaben.",
-				"&eCommand to delete stores via parameter specifications.");
-		argumentInput("vss_storage_breaktoggle", "breaktoggle", basePermission,
-				"/vss storage breaktoggle", "/vss storage breaktoggle ", false,
-				"&c/vss storage breaktoggle &f| Togglet ob man Shops direkt löschen durch das Abbauen kann.",
-				"&c/vss storage breaktoggle &f| Togglet whether you can delete stores directly by dismantling.",
-				"&bBefehlsrecht für &f/vss storage breaktoggle",
-				"&bCommandright for &f/vss storage breaktoggle",
-				"&eBefehl für die direkte",
-				"&eCommand for the intermediate command.");
-		argumentInput("vss_storage_toggle", "toggle", basePermission,
-				"/vss storage toggle", "/vss storage toggle ", false,
-				"&c/vss storage toggle &f| Togglet ob man fremde Shops durch das Gui administrieren kann.",
-				"&c/vss storage toggle &f| Toggle whether you can administrate foreign stores through the gui.",
-				"&bBefehlsrecht für &f/vss storage toggle",
-				"&bCommandright for &f/vss storage toggle",
-				"&eBefehl zum togglet ob man fremde Shops durch das Gui administrieren kann.",
-				"&eCommand to toggle whether you can administrate foreign stores through the gui.");
-		argumentInput("vss_storage_searchbuy", "searchbuy", basePermission+".signstorage",
-				"/vss storage searchbuy [Material] [Displayname...]", "/vss storage searchbuy", false,
-				"&c/vss storage searchbuy [Material] [Displayname...] &f| Sucht alle Shops nach den angegebenen Parameter für Items zum kaufen.",
-				"&c/vss storage searchbuy [Material] [Displayname...] &f| Searches all stores for the specified parameters for items to buy.",
-				"&bBefehlsrecht für &f/vss storage searchbuy",
-				"&bCommandright for &f/vss storage searchbuy",
-				"&eSucht alle Shops nach den angegebenen Parameter für Items zum kaufen.",
-				"&eSearches all stores for the specified parameters for items to buy.");
-		argumentInput("vss_storage_searchsell", "searchsell", basePermission+".signstorage",
-				"/vss storage searchsell [Material] [Displayname...]", "/vss storage searchsell", false,
-				"&c/vss storage searchsell [Material] [Displayname...] &f| Sucht alle Shops nach den angegebenen Parameter für Items zum verkaufen.",
-				"&c/vss storage searchsell [Material] [Displayname...] &f| Searches all stores for the specified parameters for items to sell.",
-				"&bBefehlsrecht für &f/vss storage searchsell",
-				"&bCommandright for &f/vss storage searchsell",
-				"&eSucht alle Shops nach den angegebenen Parameter für Items zum verkaufen.",
-				"&eSearches all stores for the specified parameters for items to sell.");
 	}
 	
 	private void comBypass() //INFO:ComBypass
@@ -932,6 +884,14 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDu hast nicht genug Geld!",
 						"&cYou dont have enough money!"}));
+		languageKeys.put("NotEnoughtExp",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDu hast nicht genug Exp!",
+						"&cYou dont have enough exp!"}));
+		languageKeys.put("NotEnoughtMaterial",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDu hast nicht genug Materialien!",
+						"&cYou dont have enough materials!"}));
 		languageKeys.put("OnCooldown",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDer Befehl ist in Cooldown!",
@@ -968,6 +928,14 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDu hast für das angegeben Konto keine Abheberechte!",
 						"&cYou have no withdrawal rights for the specified account!"}));
+		languageKeys.put("CurrencyDontExist",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDie angegebene Währung existiert nicht!",
+						"&cThe specified currency does not exist!"}));
+		languageKeys.put("CurrencyDontMatch",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDie angegebenen Währungen gleichen sich nicht!",
+						"&cThe currencies shown are not the same!"}));
 		
 		languageKeys.put("Cmd.OtherCmd",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
@@ -1013,8 +981,20 @@ public class YamlManager
 						""}));
 		languageKeys.put("City.Expand.CostHeadline",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"Für die Erweiterung nach %direction% mit %blocklenght% Blöcken, fallen folgende Kosten an:",
+						"&eFür die Erweiterung nach %direction% mit %blocklenght% Blöcken, fallen folgende Kosten an:",
 						""}));
+		languageKeys.put("City.Expand.Moneyline",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&f- &b%money%",
+						"&f- &b%money%"}));
+		languageKeys.put("City.Expand.Expline",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&f- &b%exp% Exp",
+						"&f- &b%exp% Exp"}));
+		languageKeys.put("City.Expand.Materialline",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&f- &b%amount% %material%",
+						"&f- &b%amount% %material%"}));
 		languageKeys.put("City.Expand.Category", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&6Stadterweiterung",

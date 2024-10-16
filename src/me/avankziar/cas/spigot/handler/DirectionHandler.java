@@ -10,10 +10,13 @@ public class DirectionHandler
 		BlockFace dir = BlockFace.SELF;
 	    float minAngle = Float.MAX_VALUE;
 	    float angle;
-	    for (BlockFace tested : BlockFace.values()) {
-	        if (tested != BlockFace.SELF) {
+	    for (BlockFace tested : BlockFace.values()) 
+	    {
+	        if (tested != BlockFace.SELF) 
+	        {
 	            angle = vector.angle(tested.getDirection());
-	            if (!Float.isNaN(angle) && angle < minAngle) {
+	            if (!Float.isNaN(angle) && angle < minAngle) 
+	            {
 	                minAngle = angle;
 	                dir = tested;
 	            }
